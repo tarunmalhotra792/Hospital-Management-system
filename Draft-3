@@ -1,0 +1,179 @@
+# Patients User flow
+
+
+
+
+#Primary conditions for password validation :
+#Minimum 8 characters.
+#The alphabets must be between [a-z]
+#At least one alphabet should be of Upper Case [A-Z]
+#At least 1 number or digit between [0-9].
+
+def Password_Validation():
+    import re
+    global cond,flag
+    flag=0
+    while(flag>=0):
+        if (len(Pswd)<5) or (len(Pswd)>10):
+           flag=-1
+           cond=0
+           print "Not a Valid password. Please make sure to include \n*Minimum 5 and max 8 character.\n*At least one alphabets must be between [a-z]\n*At least one alphabet should be of Upper Case [A-Z]\n*At least 1 number or digit between [0-9]."
+           return cond,flag
+        elif not re.search("[a-z]",Pswd):
+           flag=-1
+           cond=0
+           print "Not a Valid password. Please make sure to include \n*Minimum 5 and max 8 character.\n*At least one alphabets must be between [a-z]\n*At least one alphabet should be of Upper Case [A-Z]\n*At least 1 number or digit between [0-9]."
+           return cond,flag
+        elif not re.search("[A-Z]",Pswd):
+            flag=-1
+            cond=0
+            print "Not a Valid password. Please make sure to include \n*Minimum 5 and max 8 character.\n*At least one alphabets must be between [a-z]\n*At least one alphabet should be of Upper Case [A-Z]\n*At least 1 number or digit between [0-9]."
+
+            return cond,flag
+        elif not re.search("[0-9]",Pswd):
+            flag=-1
+            cond=0
+            print "Not a Valid password. Please make sure to include \n*Minimum 5 and max 8 character.\n*At least one alphabets must be between [a-z]\n*At least one alphabet should be of Upper Case [A-Z]\n*At least 1 number or digit between [0-9]."
+            return cond,flag
+        else:
+            cond=1
+            flag=1
+            print cond,"Successfull Password validation"
+            return cond,flag
+        
+#Registering new patient
+        
+def CreateNewUser():
+    # Add onemore check to verify the user with passworr one more time  
+    global Pswd,cond,UserId
+    cond=0
+    UserId=raw_input("Please enter your username")
+    while cond==0:
+        Pswd=raw_input("Please enter, ,your password for {}".format(UserId))
+        Password_Validation()
+    else:
+        writeintoexcel()
+        print "You have successfully created your logging Username and Password"
+        
+        
+def writeintoNewexcel():
+    import csv
+    
+    with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','w') as wr:
+        filewriter=csv.writer(wr,delimiter=',', lineterminator='\n')
+        z=UserId+":"+Pswd
+        print z
+        for i, row in enumerate(z):
+            data=[i,z]
+        filewriter.writerow(['S.No','UserName','Password'])
+        filewriter.writerow([i,UserId,Pswd])
+        
+def writeintoexcel():
+    global UserId
+    import csv
+    with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r') as ap:
+        reader = csv.reader(ap,delimiter = ",")
+        data = list(reader)
+        row_count = len(data)
+        print row_count
+
+    #Calling date and time function
+    csvdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','a') as wr:
+        filewriter=csv.writer(wr,delimiter=',', lineterminator='\n')
+        filewriter.writerow([row_count,csvdate,UserId,Pswd])
+        return row_count,UserId,Pswd,csvdate
+        
+def UpdatePassword():
+    #Add one more time to validate user's passwrod
+    #Add despatcher if you are login asAdmin you can overwrite it all manually
+    global Pswd,UserId
+    ValidateUser()
+    
+    if T>0:
+        Pswd=raw_input("Please enter your new password to register with us")
+        Pswd2=raw_input("Please enter oncw again your new password to register with us")
+        if Pswd!=Pswd2:    
+            print "you have entered the correct password, Please try again"
+            return
+        Password_Validation()
+        csvdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print csvdate
+        with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r') as ap1:
+            reader = csv.reader(ap1,delimiter = ",")
+            data = list(reader)
+            row_count = len(data)
+                 
+                #print data
+        with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r+') as wr1:
+            filewriter=csv.writer(wr1,delimiter=',',lineterminator='\n' )
+            for x in data:
+                if UserId==x[2]:
+                    x[3]=x[3].replace(x[3],Pswd)
+                    x[1]=csvdate
+                filewriter.writerow(x)
+    
+def ValidateUser():
+    global T,UserId
+    T=0
+    UserId=None
+    Pswd=None
+    UserId=raw_input("Please enter your username")
+    Pswd1=raw_input("Please enter your password")
+    with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r') as vu:
+        for line in vu:
+            liner=csv.reader(vu,delimiter = ",")
+            data=list(liner)
+            for x in data:
+                if (UserId==x[2] and Pswd1==x[3]):
+                    print "matched"
+                    T+=1
+                    print "Successfull validation, {} is a valid customer".format(UserId)
+                    return Pswd1,UserId,T
+                    break
+            else:
+                T=0
+                print "Sorry sir {}, you are not a valid customer , Please go back to the option and register with us".format(UserId)
+
+                
+def DeleterUser():
+    global Pswd,UserId
+    ValidateUser()
+    
+    if T>0:
+        with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r+') as wr1:
+            filewriter=csv.writer(wr1,delimiter=',',lineterminator='\n' )
+            reader = csv.reader(wr1,delimiter = ",")
+            data = list(reader)
+            row_count = len(data)
+            print len(data)
+            for x in data:
+                #print row_count 
+                if UserId!=x[2]:
+                    
+                    
+                    
+                #filewriter.writerow(x)
+        
+
+def Patient():
+    inp1=input("Please enter the operation you would like to perform\n1)Validate User \n2)Create new user \n3)Update password \n4Deleter User")
+    if inp1==1:
+        ValidateUser()
+    if inp1==2:
+        CreateNewUser()
+    if inp1==3:
+        UpdatePassword()
+    if inp1==4:
+        DeleterUser()
+def main():
+    
+    print ("Hello Sir/Madam, thanks for choosing our hospital,We will try our best to take care of you and your family \n\n")
+    while(True):
+        Type=input("Please enter the number displayed on the screen against whether you are \n1) Patient\n2) Customer\n3) admin")
+        if Type==1:
+            Patient()
+import csv
+import datetime
+
+main()
