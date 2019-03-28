@@ -1,0 +1,124 @@
+#from HMS_Draft1 import *
+
+#from HMS_Draft1 import ExistingCustomer as ob3
+#import HMS_Draft1  as ob3
+import re
+
+def is_valid_email():
+    global M,email
+    M=0
+    while M==0:
+        email = raw_input ("Please type in an email address ")
+        if re.match("\A(?P<name>[\w\-_]+)@(?P<domain>[\w\-_]+).(?P<toplevel>[\w]+)\Z",email,re.IGNORECASE):
+            print("Email is valid")
+            M+=1
+            
+            return M
+            
+        else :
+            print("Email is invalid,Please try again")
+            M=0
+            is_valid_email()
+            return M
+        
+#New File creation        
+def ExcelFileCreation():
+    #Using xlwt modulde
+    import xlwt
+    from xlwt import Workbook
+
+    wb=Workbook()
+
+    sheet1=wb.add_sheet('PatientsDetails')
+
+    sheet1.write(0,0,'First Name')
+    sheet1.write(0,1,'Last Name')
+    sheet1.write(0,2,'MobileNumber')
+    sheet1.write(0,3,'Email Address')
+    sheet1.write(0,4,'Home Address')
+    sheet1.write(0,5,'Date and Time')
+
+    wb.save('C:\Python27\Hospital_Management_System\Files\PatientsDetails_2.xlsx')
+#Fresh creation of an excel file           
+def newexcelfile():
+    import openpyxl
+    from openpyxl import load_workbook
+    import time
+    headers = ['First Name','Last Name','Contact Number','Email Address','Address','Date and Time']
+    workbook_name = r'C:\Python27\Hospital_Management_System\Files\Expe1.xlsx'
+    
+    wb = openpyxl.Workbook() 
+    page = wb.active
+    page.title='Patient details'
+    now = time.strftime("%x")
+    page.append(headers)
+    page.append([Fname,Ename,Mnum,email,Address,now])
+    print page.max_row 
+    wb.save(filename=workbook_name)
+#NewUserRegistration
+    
+def writeintoexcel2(): 
+    import openpyxl
+    from openpyxl import load_workbook
+    import time
+    headers = ['First Name','Last Name','Contact Number','Email Address','Address','Date and Time']
+    workbook_name = r'C:\Python27\Hospital_Management_System\Files\Expe1.xlsx'
+    
+    #wb = openpyxl.Workbook()
+    wb = load_workbook(workbook_name)
+    page = wb.active
+    #page.title='Patient details'
+    now = time.strftime("%Y-%m-%d %H:%M:%S")
+    #page.append(headers)
+    page.append([Fname,Ename,Mnum,email,Address,now])
+    print page.max_row 
+    wb.save(filename=workbook_name)
+
+def UpdateUserDetails1():
+   
+    #print "initial final",UserId
+    
+    import openpyxl  as op
+    
+    
+    book = op.load_workbook(r'C:\Python27\Hospital_Management_System\Files\Expe1.xlsx')
+    sheet = book.active
+    Fname='Tarun'
+    Ename='Malhotra'
+    matching_row_nbr=None
+    print "Actyuak final",UserId
+    print sheet.max_row+1
+
+'''
+    for rowNum in range(2,sheet.max_row+1):
+        log_name = sheet.cell(row=rowNum,column=1).value
+        print log_name
+        if log_name == Fname:
+            matching_row_nbr=rowNum            
+            print matching_row_nbr
+            
+        if matching_row_nbr is not None:
+            sheet.cell(row=matching_row_nbr,column=2).value=Ename
+            book.save(r'C:\Python27\Hospital_Management_System\Files\Expe1.xlsx')
+        else:
+        # If the none of the rows match then continue with intended use of new data
+            print Fname      
+
+'''
+
+def GetUserDetails():
+
+    print ("Please go ahead and register with  us with your personal details")
+    global Fname,Ename,Mnum,Address,email
+    Fname=raw_input("Please enter your First Name\n")
+    Ename=raw_input("Please enter your Last Name\n")
+    Mnum=input("Please enter your contact number\n")
+    #Email=raw_input("Please enter your Email Address \n".format(Fname))
+    is_valid_email()
+    Address=raw_input("Please enter your home Address \n".format(Fname))
+    writeintoexcel2()
+    print ("you have successfully registered your personal details")
+    
+
+
+#main()
