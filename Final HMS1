@@ -7,6 +7,12 @@
 #At least one alphabet should be of Upper Case [A-Z]
 #At least 1 number or digit between [0-9].
 
+#from HMS_SC2 import UpdateUserDetails1
+import HMS_SC2  as ob2
+import csv
+import datetime
+#from HMS_SC2 import *
+
 def Password_Validation():
     import re
     global cond,flag
@@ -124,10 +130,12 @@ def UpdatePassword():
                 if UserId==x[2]:
                     x[3]=x[3].replace(x[3],Pswd)
                     x[1]=csvdate
+                    return UserId
                 filewriter.writerow(x)
     
 def ValidateUser():
     global T,UserId
+    #print "ValdiateUser beofre " , T,UserId
     T=0
     UserId=None
     Pswd=None
@@ -143,6 +151,7 @@ def ValidateUser():
                     print "matched"
                     T+=1
                     print T,"Successfull validation, {} welcom to home page\n".format(UserId)
+                    print "ValdiateUser beofre " , T,UserId
                     return Pswd1,UserId,T
                     
             else:
@@ -172,16 +181,37 @@ def DeleterUser():
 def ExistingCustomer():
     op1=input("Please select the operations \n1)You password updatation \n2)personal details updation \n3)Book an appointments \n4)List of departments.\n5)Press 4 to exit from the page")
     global UserId
-    
+    email=None
     if op1==1:
         UpdatePassword()
+        x=UserId
+        return UserId,x
         
     if op1==2:
         print 'final',UserId
-        UpdateUserDetails()
+        inp4=input("Please select the operation which you would like to operate\n1)First Name \n2)Last Name \n3)Contact Number \n4)Email Address \n5)Home address ")
+        if inp4==1:
+            NFName=raw_input("Please enter the new First Name, which you would like to update")
+            ob2.UpdateUserDetails1(UserId,NFName,inp4)
+        if inp4==2:
+            NFName=raw_input("Please enter the new Last Name, which you would like to update")
+            ob2.UpdateUserDetails1(UserId,NFName,inp4)
+        if inp4==3:
+            NFName=raw_input("Please enter the new contact number, which you would like to update")
+            ob2.UpdateUserDetails1(UserId,NFName,inp4)
+        if inp4==4:
+            #NFName=raw_input("Please enter the new Email address, which you would like to update")            
+            ob2.is_valid_email()
+            NFName=ob2.email
+            ob2.UpdateUserDetails1(UserId,NFName,inp4)
+            
+        if inp4==5:
+            NFName=raw_input("Please enter the new home address, which you would like to update")
+            ob2.UpdateUserDetails1(UserId,NFName,inp4)        
+        return UserId,inp4,NFName
     
     if op1==4:
-        return
+        return UserId
             
     
 def Patient():
@@ -204,8 +234,4 @@ def main():
         if Type==1:
             Patient()
                 
-    
-import csv
-import datetime
-from HMS_DraftV2 import GetUserDetails,UpdateUserDetails
 main()
