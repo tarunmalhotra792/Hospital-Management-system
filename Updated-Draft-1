@@ -45,7 +45,7 @@ def CreateNewUser():
     global Pswd,cond,UserId
     cond=0
     UserId=raw_input("Please enter your username to register")
-    with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r') as vu:
+    with open(r'C:\Python27\Hospital_Management_System\Filed\Patients_Credential.csv','r') as vu:
         for line in vu:
             liner=csv.reader(vu,delimiter = ",")
             data=list(liner)
@@ -68,7 +68,7 @@ def CreateNewUser():
 def writeintoNewexcel():
     import csv
     
-    with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','w') as wr:
+    with open(r'C:\Python27\Hospital_Management_System\Filed\Patients_Credential.csv','w') as wr:
         filewriter=csv.writer(wr,delimiter=',', lineterminator='\n')
         z=UserId+":"+Pswd
         print z
@@ -80,7 +80,7 @@ def writeintoNewexcel():
 def writeintoexcel():
     global UserId
     import csv
-    with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r') as ap:
+    with open(r'C:\Python27\Hospital_Management_System\Filed\Patients_Credential.csv','r') as ap:
         reader = csv.reader(ap,delimiter = ",")
         data = list(reader)
         row_count = len(data)
@@ -88,7 +88,7 @@ def writeintoexcel():
 
     #Calling date and time function
     csvdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','a') as wr:
+    with open(r'C:\Python27\Hospital_Management_System\Filed\Patients_Credential.csv','a') as wr:
         filewriter=csv.writer(wr,delimiter=',', lineterminator='\n')
         filewriter.writerow([row_count,csvdate,UserId,Pswd])
         return row_count,UserId,Pswd,csvdate
@@ -112,13 +112,13 @@ def UpdatePassword():
         Password_Validation()
         csvdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
-        with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r') as ap1:
+        with open(r'C:\Python27\Hospital_Management_System\Filed\Patients_Credential.csv','r') as ap1:
             reader = csv.reader(ap1,delimiter = ",")
             data = list(reader)
             row_count = len(data)
                  
                 #print data
-        with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r+') as wr1:
+        with open(r'C:\Python27\Hospital_Management_System\Filed\Patients_Credential.csv','r+') as wr1:
             filewriter=csv.writer(wr1,delimiter=',',lineterminator='\n' )
             for x in data:
                 if UserId==x[2]:
@@ -134,7 +134,7 @@ def ValidateUser():
     UserId=raw_input("Please enter your username ")
     Pswd1=raw_input("Please enter your existing password")
     
-    with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r') as vu:
+    with open(r'C:\Python27\Hospital_Management_System\Filed\Patients_Credential.csv','r') as vu: 
         for line in vu:
             liner=csv.reader(vu,delimiter = ",")
             data=list(liner)
@@ -156,7 +156,7 @@ def DeleterUser():
     
     if T>0:
         print "ggpong into the loops of deletion "
-        with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r+') as wr1:
+        with open(r'C:\Python27\Hospital_Management_System\Filed\Patients_Credential.csv','r+') as wr1:
             filewriter=csv.writer(wr1,delimiter=',',lineterminator='\n' )
             reader = csv.reader(wr1,delimiter = ",")
             data = list(reader)
@@ -171,14 +171,15 @@ def DeleterUser():
 
 def ExistingCustomer():
     op1=input("Please select the operations \n1)You password updatation \n2)personal details updation \n3)Book an appointments \n4)List of departments.\n5)Press 4 to exit from the page")
-    global UserId
+    HMS_SC2.UserId
     
     if op1==1:
         UpdatePassword()
         
     if op1==2:
         print 'final',UserId
-        UpdateUserDetails()
+        HMS_SC2.ExcelFileCreation
+        HMS_SC2.UpdateUserDetails()
     
     if op1==4:
         return
@@ -207,5 +208,6 @@ def main():
     
 import csv
 import datetime
-from HMS_DraftV2 import GetUserDetails,UpdateUserDetails
+import  HMS_SC2
+
 main()
