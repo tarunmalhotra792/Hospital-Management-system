@@ -2,7 +2,7 @@
 
 
 import re
-
+UserId=None 
 def is_valid_email():
     global M,email
     M=0
@@ -37,7 +37,7 @@ def ExcelFileCreation():
     sheet1.write(0,4,'Home Address')
     sheet1.write(0,5,'Date and Time')
 
-    wb.save('C:\Python27\Hospital_Management_System\Files\PatientsDetails_2.xlsx')
+    wb.save('C:\Python27\Hospital_Management_System\Filed\PatientsDetails_2.xlsx')
 #Fresh creation of an excel file           
 def newexcelfile():
     import openpyxl
@@ -61,7 +61,7 @@ def writeintoexcel2():
     from openpyxl import load_workbook
     import time
     headers = ['First Name','Last Name','Contact Number','Email Address','Address','Date and Time']
-    workbook_name = r'C:\Python27\Hospital_Management_System\Files\Expe1.xlsx'
+    workbook_name = r'C:\Python27\Hospital_Management_System\Filed\Expe1.xlsx'
     
     #wb = openpyxl.Workbook()
     wb = load_workbook(workbook_name)
@@ -78,8 +78,8 @@ def UpdateUserDetails():
     
     
     import openpyxl  as op
-    UserId=None
-    book = op.load_workbook(r'C:\Python27\Hospital_Management_System\Files\Expe1.xlsx')
+    
+    book = op.load_workbook(r'C:\Python27\Hospital_Management_System\Filed\Expe1.xlsx')
     sheet = book.active
     Fname='Tarun'
     Ename='Malhotra'
@@ -121,5 +121,5 @@ def main():
     GetUserDetails()
     UpdateUserDetails()
 
-from HMS_Draft1 import ExistingCustomer
+from HMS_SC1 import ExistingCustomer
 #main()
