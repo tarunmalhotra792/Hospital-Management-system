@@ -1,67 +1,111 @@
 
 
 
-'''
-import time
-
-now = time.strftime("%H")
-inp7=input("Please select the department you would like to see \n1)Dermatlogirs \n2)Eyecare \n3)Orthopeadics")
-if inp7==1:
-    inp8=raw_input("Please find the details of the doctors which are available \n1) Doctor A dermatolist )
-
-print x    
-print now
-'''
-
-
-
-
-
 try:
     import tkinter as tk
     from tkinter import ttk
 except ImportError:
     import Tkinter as tk
-    import ttk
+    import ttk    
 
-from tkcalendar import Calendar, DateEntry
-
+    
 def example1():
+    from tkcalendar import Calendar
     def print_sel():
-        print(cal.selection_get())
-       
-
+        global x
+        x=0
+        x=(cal.selection_get())
+        return x
     top = tk.Toplevel(root)
-
     cal = Calendar(top,
                    font="Arial 14", selectmode='day',
                    cursor="hand1", year=2019, month=3, day=29)
     cal.pack(fill="both", expand=True)
     ttk.Button(top, text="ok", command=print_sel).pack()
+   
+def call(example1):
+    global root
+    root=None
+    root = tk.Tk()
+    s = ttk.Style(root)
+    s.theme_use('clam')
+    ttk.Button(root, text='Calendar', command=example1).pack(padx=10, pady=10)
 
-def example2():
-    top = tk.Toplevel(root)
-
-    ttk.Label(top, text='Choose date').pack(padx=10, pady=10)
-
-    cal = DateEntry(top, width=12, background='darkblue',
-                    foreground='white', borderwidth=2)
-    cal.pack(padx=10, pady=10)
-
-root = tk.Tk()
-s = ttk.Style(root)
-s.theme_use('clam')
-
-ttk.Button(root, text='Calendar', command=example1).pack(padx=10, pady=10)
-ttk.Button(root, text='DateEntry', command=example2).pack(padx=10, pady=10)
-
-root.mainloop()
+    root.mainloop()
+    print "You have choosen the date as",x
 
 
-"""
-Simple calendar using ttk Treeview together with calendar and datetime
-classes.
-"""
-'''
 
 
+#Tarun Malhotra
+
+def Appointment():
+    inp7=input("Please select the department you would like to see \n1)Dermatlogist \n2)Eyecare \n3)Orthopeadics")
+    if inp7==1:
+        path1=r'C:\Python27\Hospital_Management_System\Files\Doctors_details.xlsx'
+        ob=openpyxl.load_workbook(path1)
+        inp8=input("Please select the doctor you would like to see \n1)Doctor A \n2)Doctor B \n3)Doctor C")
+        if inp8==1:
+            ws4=ob.get_sheet_by_name('Doctor_A')
+            #call(example1)
+            readAppointment(path1,ob,ws4)
+            return path1,ws4
+        if inp8==2:
+            ws4 = ob["Doctor_B"]
+            #call(example1)
+            readAppointment(path1,ob,ws4)
+            return path1,ws4
+        
+def readAppointment(path1,ob,ws4):
+    
+    x2=2#User enrty to put out dates
+    
+    #ws4 = ob.active
+    matching_row_nbr=None
+    rownum1=None
+    for rownum in range(2,ws4.max_row + 1):
+        cellname1=ws4.cell(row=rownum,column=1).value
+        cellname2=ws4.cell(row=rownum,column=2).value
+        cellname3=ws4.cell(row=rownum,column=2+x2).value
+        cellname4=ws4.cell(row=rownum,column=4).value
+        print cellname1,cellname2,cellname3
+
+    inp2=input("Please enter the number corresponding to slots")
+    for rownum1 in range(2,ws4.max_row + 1):
+        cellname1=ws4.cell(row=rownum1,column=1).value
+        cellname2=ws4.cell(row=rownum1,column=2).value
+        cellname3=ws4.cell(row=rownum1,column=2+x2).value
+        cellname4=ws4.cell(row=rownum1,column=4).value
+        if cellname1==inp2:
+            matching_row_nbr=rownum1
+            print "you have choose the below appointment slot\n",cellname1,cellname2,cellname3
+            if cellname3=='NA':
+                print "Sorry, this slot is not available"
+            else:
+                print "this slot is available"
+                ws4.cell(row=matching_row_nbr,column=2+x2).value="NA"
+                print "We have successfully booked your appointment"
+                print "check",cellname1,cellname2,cellname3
+                #ob.save(path1)
+        
+    
+            
+        
+import openpyxl
+Appointment()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
