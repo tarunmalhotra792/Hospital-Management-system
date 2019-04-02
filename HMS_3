@@ -1,0 +1,134 @@
+
+##Experimental file
+import time
+
+try:
+    import tkinter as tk
+    from tkinter import ttk
+except ImportError:
+    import Tkinter as tk
+    import ttk    
+
+    
+def example1():
+    
+    from tkcalendar import Calendar
+    def print_sel():
+        global x,d,m,y
+        
+        print 'now',now
+        x=0
+        x=(cal.selection_get())
+        return x
+    now = time.strftime("%Y-%m-%d %H:%M:%S")
+    d=int(time.strftime("%d"))
+    m=int(time.strftime("%m"))
+    y=int(time.strftime("%Y"))
+    top = tk.Toplevel(root)
+    cal = Calendar(top,
+                   font="Arial 14", selectmode='day',
+                   cursor="hand1", year=y, month=m, day=d)
+    cal.pack(fill="both", expand=True)
+    ttk.Button(top, text="ok", command=print_sel).pack()
+    
+   
+def call(example1):
+    global root
+    root=None
+    root = tk.Tk()
+    s = ttk.Style(root)
+    s.theme_use('clam')
+    ttk.Button(root, text='Calendar', command=example1).pack(padx=10, pady=10)
+
+    root.mainloop()
+    print "You have choosen the date as",x
+    z=x.strftime('%d')
+    print "z===",z
+    return z
+
+#Tarun Malhotra
+
+def Appointment():
+    
+    
+    inp7=input("Please select the department you would like to see \n1)Dermatlogist \n2)Eyecare \n3)Orthopeadics")
+    if inp7==1:
+        path1=r'C:\Python27\Hospital_Management_System\Files\Doctors_details.xlsx'
+        
+        ob=openpyxl.load_workbook(path1)
+        inp8=input("Please select the doctor you would like to see \n1)Doctor A \n2)Doctor B \n3)Doctor C")
+        
+        if inp8==1:
+            ws4=ob.get_sheet_by_name('Doctor_A')
+            call(example1)
+            z=int(x.strftime('%d'))
+            print  'final',z
+            readAppointment(path1,ob,ws4,z)
+            return path1,ws4
+        if inp8==2:
+            ws4 = ob["Doctor_B"]
+            call(example1)
+            readAppointment(path1,ob,ws4)
+            return path1,ws4
+        
+def readAppointment(path1,ob,ws4,z):
+    
+    #x2=3#User enrty to put out dates
+    cellname31=ws4.cell(row=1,column=2+z).value
+    print cellname31
+    #ws4 = ob.active
+    matching_row_nbr=None
+    rownum1=None
+    print "You current appointmen avaliable slots are below"
+    for rownum in range(2,ws4.max_row + 1):
+        cellname1=ws4.cell(row=rownum,column=1).value
+        cellname2=ws4.cell(row=rownum,column=2).value
+        cellname3=ws4.cell(row=rownum,column=2+z).value
+        cellname4=ws4.cell(row=rownum,column=4).value
+        
+        print cellname1,cellname2,cellname3
+
+    inp2=input("Please enter the number corresponding to slots")
+    for rownum1 in range(2,ws4.max_row + 1):
+        cellname1=ws4.cell(row=rownum1,column=1).value
+        cellname2=ws4.cell(row=rownum1,column=2).value
+        cellname3=ws4.cell(row=rownum1,column=2+z).value
+        cellname4=ws4.cell(row=rownum1,column=4).value
+        if cellname1==inp2:
+            matching_row_nbr=rownum1
+            print "you have choose the below appointment slot\n",cellname1,cellname2,cellname3
+            if cellname3=='NA':
+                print "Sorry, this slot is not available, Please choose anathor aption from below"
+                readAppointment(path1,ob,ws4,z)
+                return
+            else:
+                print "yeah!!  slot is available"
+                ws4.cell(row=matching_row_nbr,column=2+z).value="NA"
+                try:
+                    ob.save(path1)
+                    print "We have successfully booked your appointment"
+                except IOError, e:
+                    print "Not allowed, your file is already open please close it and try again later"
+                
+                    
+    
+            
+        
+import openpyxl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
