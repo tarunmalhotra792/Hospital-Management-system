@@ -9,6 +9,7 @@
 
 #from HMS_SC2 import UpdateUserDetails1
 import HMS_SC2  as ob2
+import HMS_SC3 as ob5
 import csv
 import datetime
 #from HMS_SC2 import *
@@ -57,7 +58,7 @@ def CreateNewUser():
             data=list(liner)
             for x in data:
                 if UserId==x[2] :
-                    print "Sorry {}, you are already registered with yus\n Please come try again ".format(UserId)
+                    print "Sorry {},you are already registered with yus\n Please come try again ".format(UserId)
                     cond=1
                     return cond    
     while cond==0:
@@ -66,7 +67,7 @@ def CreateNewUser():
     else:
         writeintoexcel()
         print "You have successfully created your logging Username and Password\n"
-        GetUserDetails()
+        ob2.GetUserDetails()
 
     
     
@@ -105,17 +106,18 @@ def UpdatePassword():
     #Add despatcher if you are login asAdmin you can overwrite it all manually
     
     global Pswd,UserId
-    ValidateUser()
+    #ValidateUser()
     
     if T>0:
         Pswd=raw_input("Please enter your new password to register with us")
         Pswd2=raw_input("Please enter once again your new password to register with us")
         if Pswd!=Pswd2:    
-            print "you have entered the correct password, Please try again"
+            print "you have entered the incorrect password, Please try again"
             return
-        else:
-            print "You password is not matching, Please try again"
+        #else:
+            #print "You password is not matching, Please try again"
         Password_Validation()
+        
         csvdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
         with open(r'C:\Python27\Hospital_Management_System\Files\Patients_Credential.csv','r') as ap1:
@@ -129,10 +131,14 @@ def UpdatePassword():
             for x in data:
                 if UserId==x[2]:
                     x[3]=x[3].replace(x[3],Pswd)
+                    print "Pswd",Pswd
                     x[1]=csvdate
-                    return UserId
+                print 'x',x
                 filewriter.writerow(x)
-    
+            print "we have successfylly updated your password"
+                #return UserId    
+
+                
 def ValidateUser():
     global T,UserId
     #print "ValdiateUser beofre " , T,UserId
@@ -181,7 +187,7 @@ def DeleterUser():
 def ExistingCustomer():
     op1=input("Please select the operations \n1)You password updatation \n2)personal details updation \n3)Book an appointments \n4)List of departments.\n5)Press 4 to exit from the page")
     global UserId
-    
+    email=None
     if op1==1:
         UpdatePassword()
         x=UserId
@@ -189,9 +195,30 @@ def ExistingCustomer():
         
     if op1==2:
         print 'final',UserId
-        ob2.UpdateUserDetails1()
-        return UserId
-    
+        inp4=input("Please select the operation which you would like to operate\n1)First Name \n2)Last Name \n3)Contact Number \n4)Email Address \n5)Home address ")
+        if inp4==1:
+            NFName=raw_input("Please enter the new First Name, which you would like to update")
+            ob2.UpdateUserDetails1(UserId,NFName,inp4)
+        if inp4==2:
+            NFName=raw_input("Please enter the new Last Name, which you would like to update")
+            ob2.UpdateUserDetails1(UserId,NFName,inp4)
+        if inp4==3:
+            NFName=raw_input("Please enter the new contact number, which you would like to update")
+            ob2.UpdateUserDetails1(UserId,NFName,inp4)
+        if inp4==4:
+            #NFName=raw_input("Please enter the new Email address, which you would like to update")            
+            ob2.is_valid_email()
+            NFName=ob2.email
+            ob2.UpdateUserDetails1(UserId,NFName,inp4)  
+        if inp4==5:
+            NFName=raw_input("Please enter the new home address, which you would like to update")
+            ob2.UpdateUserDetails1(UserId,NFName,inp4)        
+        return UserId,inp4,NFName
+    if op1==3:
+        ob5.Appointment()
+        
+
+            
     if op1==4:
         return UserId
             
@@ -208,6 +235,7 @@ def Patient():
             ExistingCustomer()
     if op==3:
         print "Calling your daddy idiot.. 9599176859........"
+        
 def main():
     
     print ("Hello Sir/Madam, thanks for choosing our hospital,We will try our best to take care of you and your family \n\n")
