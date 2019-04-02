@@ -13,13 +13,13 @@ def is_valid_email():
             print("Email is valid")
             M+=1
             
-            return M
+            return M,email
             
         else :
             print("Email is invalid,Please try again")
             M=0
             is_valid_email()
-            return M
+            return M,email
         
 #New File creation        
 def ExcelFileCreation():
@@ -74,37 +74,39 @@ def writeintoexcel2():
     print page.max_row 
     wb.save(filename=workbook_name)
 
-def UpdateUserDetails1():
-   
-    #print "initial final",UserId
-    
+def UpdateUserDetails1(UserId,NFName,inp4):
     import openpyxl  as op
     
-    
+    import time
+    now = time.strftime("%Y-%m-%d %H:%M:%S")
     book = op.load_workbook(r'C:\Python27\Hospital_Management_System\Files\Expe1.xlsx')
     sheet = book.active
-    Fname='Tarun'
-    Ename='Malhotra'
     matching_row_nbr=None
-    print "Actyuak final",UserId
-    print sheet.max_row+1
-
-'''
+    #print "Actyuak final",UserId
+    #print sheet.max_row+1
+    
+    M=0
     for rowNum in range(2,sheet.max_row+1):
         log_name = sheet.cell(row=rowNum,column=1).value
-        print log_name
-        if log_name == Fname:
-            matching_row_nbr=rowNum            
-            print matching_row_nbr
-            
+        #print log_name
+         
+        
+        if log_name == UserId:
+            matching_row_nbr=rowNum
+            M=M+1
+        
         if matching_row_nbr is not None:
-            sheet.cell(row=matching_row_nbr,column=2).value=Ename
+            sheet.cell(row=matching_row_nbr,column=inp4).value=NFName
+            sheet.cell(row=matching_row_nbr,column=6).value=now
             book.save(r'C:\Python27\Hospital_Management_System\Files\Expe1.xlsx')
-        else:
-        # If the none of the rows match then continue with intended use of new data
-            print Fname      
+            print("we have successfully updated your record")
+            return
+    if M==0:
+        print "Sorry we cannot find your contact, corresponding to your Userid. please go back and freshly register your details"
+        return M
+    #if M==1:
+        #print "Sorry we can find your contact, corresponding to your Userid. please go back and freshly register your details"
 
-'''
 
 def GetUserDetails():
 
